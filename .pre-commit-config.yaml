@@ -34,7 +34,9 @@ repos:
 
       # Secret scanning at PUSH time. This extension ships on the VS Code
       # Marketplace and the repo is public, so a credential reaching main is
-      # world-readable at once -- and CI here runs no secret scanning at all.
+      # world-readable at once. CI scans too (.github/workflows/secret-scan.yml);
+      # this catches it before the push, while the commit can still be amended
+      # instead of the credential rotated.
       - id: gitleaks-push
         name: Secret scan the commits being pushed (gitleaks)
         entry: scripts/hooks/gitleaks-push.sh

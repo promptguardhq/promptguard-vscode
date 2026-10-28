@@ -85,9 +85,10 @@ Tests are bootstrapped via `src/test/runTest.ts` which downloads and launches VS
 ### Build a Local VSIX
 
 ```bash
-npm install -g @vscode/vsce
-vsce package --no-dependencies
+npx vsce package --no-dependencies
 ```
+
+`vsce` is a pinned devDependency (`@vscode/vsce` in `package.json`), so `npm install` already provides it; do not install it globally, or you package with a different version than CI and the release workflow do.
 
 This produces a `.vsix` file you can install in VS Code via:
 
@@ -99,16 +100,14 @@ The `--no-dependencies` flag is used because the extension has no runtime npm de
 
 ## CI/CD
 
-CI runs on every push to `main` and on PRs (`.github/workflows/ci.yml`):
+CI runs on every push to `main` and on PRs (`.github/workflows/ci.yml`), as two jobs:
 
-| Step | What it does |
+| Job | What it does |
 |---|---|
-| **Lint** | `npm run lint` (ESLint) |
-| **Format** | `npm run format:check` (Prettier) |
-| **Compile** | `npm run compile` (tsc) |
-| **Verify** | Checks `out/extension.js` exists after compilation |
-| **Test** | `xvfb-run -a npm test` (headless VS Code on Linux) |
-| **Package** | `vsce package --no-dependencies` (verify VSIX builds) |
+| **Lint and Format** | `npm run lint` (ESLint) + `npm run format:check` (Prettier) |
+| **Test and Build** | `npm run compile` (tsc), checks `out/extension.js` exists, `xvfb-run -a npm test` (headless VS Code on Linux), then `npx vsce package --no-dependencies` (verify the VSIX builds) |
+
+Secret scanning (gitleaks) runs on every push and PR in `.github/workflows/secret-scan.yml`, kept out of `ci.yml` so docs-only commits are still scanned.
 
 Reproduce CI locally:
 
@@ -137,7 +136,7 @@ The release workflow (`.github/workflows/release.yml`):
 
 1. Lints, compiles, and packages the extension
 2. Creates a GitHub Release with the `.vsix` attached
-3. Publishes to the VS Code Marketplace via `vsce publish`
+3. Publishes to the VS Code Marketplace via `npx vsce publish --packagePath`, so the Marketplace gets the exact `.vsix` attached to the GitHub Release
 
 Marketplace publishing requires a `VSCE_PAT` (Personal Access Token) secret in GitHub repo settings. Tags containing a hyphen (e.g., `v0.4.0-beta`) create a release but skip marketplace publishing.
 
