@@ -34,8 +34,24 @@ extension that never called it. "This extension does not depend on the API"
 is true of the mechanism and false of the shapes.
 
 The stub restates those shapes by hand, in a comment naming the Rust structs
-they came from. Both sides are ours and CI exercises the stub on every run, so
-a shape change surfaces as a failing test here rather than as silence — but a
-comment is not a gate. If the CLI's JSON output grows past these few commands,
-give it a published contract artifact and sync it the way the SDKs sync
+they came from (`SecurityScanResponse`, `RedactResponse` in
+`promptguard-cli/src/commands/*.rs`). That is the same hand-copy hazard that let
+the cross-SDK `guard-contract.json` drift two minor versions for five months.
+Both sides are ours and CI exercises the stub on every run, so a shape change
+surfaces as a failing test here rather than as silence — but a comment is not a
+gate. If the CLI's JSON output grows past these few commands, give it a
+published contract artifact and sync it the way the SDKs sync
 `guard-contract.json`.
+
+## No generated API types, by decision
+
+`promptguard-python` and `promptguard-node` generate their API types from the
+published OpenAPI spec, on a weekly `sync-from-api.yml` that opens a PR when the
+spec moves. This repo has no such workflow, and that is a decision, not an
+oversight (recorded 2026-08-11): types generated from the spec would describe
+requests this extension does not make. The only network code is
+`src/cliInstaller.ts`, which fetches CLI release builds from GitHub.
+
+**Revisit this if** the extension starts calling the API directly instead of
+going through the CLI. At that point copy the SDKs' `sync-from-api.yml`
+wholesale rather than inventing a second mechanism.

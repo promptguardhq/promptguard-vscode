@@ -1,120 +1,47 @@
 # AGENTS.md
 
-## Overview
+VS Code extension for PromptGuard: flags unprotected LLM SDK call sites as
+diagnostics, and drives the PromptGuard CLI for scanning, fixing and status.
+Scripts are in `package.json`; contributor workflow, test-file map and CI
+steps are in `CONTRIBUTING.md`.
 
-VS Code extension for PromptGuard. Detects unprotected LLM SDK calls in the editor, shows diagnostics, integrates with the PromptGuard CLI for scanning and fixing, and provides status bar indicators.
+## The CLI is the only backend
 
-Requires VS Code ^1.80 and the PromptGuard CLI on PATH (or configured via `promptguard.cliPath`).
+Every scan, redaction, status and project lookup shells out to the CLI through
+`src/cli.ts` and parses its stdout; the extension never calls
+`api.promptguard.co`. Its contract is the CLI's stdout and exit codes, and
+**exit 2 means findings with valid JSON on stdout**, not failure — treating
+non-zero as failure has already shipped a bug here.
+`src/test/suite/cliContract.test.ts` pins that contract against a stub binary.
+**Read `docs/adr/0001-*` and `0002-*` before** changing how the CLI is invoked
+or its output parsed, adding a network call, or adding API types / a spec-sync
+workflow.
 
-## Repository Layout
+## Constraints
 
-```
-src/
-├── extension.ts       # Extension entry point (activate/deactivate)
-├── cli.ts             # CLI integration
-├── commands/          # VS Code commands
-├── diagnostics/       # Problem detection and reporting
-└── test/
-    ├── runTest.ts     # Test runner setup
-    └── suite/         # Test suites (*.test.ts)
+- **Zero runtime npm dependencies**: all logic goes through the CLI or VS Code
+  APIs, which keeps the extension light and is why packaging uses
+  `npx vsce package --no-dependencies`. Add packages as devDependencies only.
+- **Stay compatible with VS Code ^1.80** (`engines.vscode`). The installed
+  `@types/vscode` resolves to a much newer version, so `tsc` passing does not
+  prove an API exists in 1.80; check the API's introduction version.
 
-out/                   # Compiled output (not committed)
-```
+## Testing
 
-## Setup
+`npm test` compiles first, then launches a real VS Code via
+`@vscode/test-electron` (Mocha); it cannot run in plain Node. On headless
+Linux run `xvfb-run -a npm test`.
 
-```bash
-npm install
-pre-commit install          # tracked git hooks; once per clone
-```
+## Secrets
 
-`pre-commit install` wires both stages. The push stage runs one thing: a
-gitleaks scan of the commits you are pushing. This extension ships on the VS
-Code Marketplace and the repo is public, so a credential reaching `main` is
-world-readable at once — and CI runs no secret scanning, so this hook is the
-only one there is. It is scoped to the pushed range because scanning the tree
-or the history fails on its first run and teaches everyone `--no-verify`. The
-key-validation and redaction suites are exempted by path in `.gitleaks.toml`;
-their fixtures have to look like keys, and a written exemption beats the
-assemble-from-fragments trick they were using to dodge scanners.
-
-## Building and Testing
-
-```bash
-npm run compile                      # Build (tsc)
-npm run watch                        # Watch mode
-npm test                             # Run tests (requires VS Code instance)
-
-# Linux headless
-xvfb-run -a npm test
-```
-
-Tests use `@vscode/test-electron` and launch a real VS Code instance.
-
-## Code Quality
-
-```bash
-npm run lint                         # ESLint
-npm run lint:fix                     # ESLint with auto-fix
-npm run format                       # Prettier
-npm run format:check                 # Check formatting
-```
-
-## Coding Standards
-
-- TypeScript compiled to `out/`
-- ESLint + Prettier for linting and formatting
-- Follow VS Code extension API patterns and lifecycle
-- No runtime npm dependencies (all logic via CLI or VS Code APIs)
-- Test with `@vscode/test-electron` (Mocha under the hood)
-
-## This extension has no API types, because it never calls the API
-
-`promptguard-python` and `promptguard-node` generate their API types from the
-published OpenAPI spec, on a weekly `sync-from-api.yml` that opens a PR when the
-spec moves. **This repo has no such workflow, and that is a decision, not an
-oversight.** Recorded 2026-08-11.
-
-The extension makes exactly one HTTP request in the whole codebase:
-`src/cliInstaller.ts` asks the GitHub releases API for the latest
-`promptguard-cli` build. It never speaks to `api.promptguard.co`. Every scan,
-redact, status and project lookup shells out to the CLI and parses its stdout —
-see `src/cli.ts`. Generating types from the OpenAPI spec would produce types for
-requests this extension does not make.
-
-**Its contract is with the CLI's stdout, not with the API**, and that contract
-is real: exit code 2 means "findings, with valid JSON on stdout", and treating
-non-zero as failure has already caused a bug here. `src/test/suite/cliContract.test.ts`
-pins it by running the real `CliWrapper` against a stub binary that emits the
-CLI's exact wire formats and exit codes.
-
-**The honest weak point** is that this stub restates the shapes of
-`SecurityScanResponse` and `RedactResponse` from `promptguard-cli/src/commands/*.rs`,
-in a comment that names the Rust structs and asks the next person to keep them
-aligned. That is the same hand-copy hazard that let the cross-SDK
-`guard-contract.json` drift two minor versions for five months. It is smaller —
-both sides are ours, the stub is exercised on every CI run, and a shape change
-in the CLI surfaces as a failing test here rather than as silence — but a
-comment is not a gate. If the CLI's JSON output ever grows past these few
-commands, give it a published contract artifact and sync it the way the SDKs
-sync `guard-contract.json`.
-
-**Revisit this if** the extension starts calling the API directly instead of
-going through the CLI. At that point copy the SDKs' `sync-from-api.yml`
-wholesale; do not invent a second mechanism.
-
-## Packaging
-
-```bash
-npx vsce package --no-dependencies
-```
-
-## Boundaries
-
-### Never
-- Commit API keys, tokens, or credentials
-- Add runtime npm dependencies (keep the extension lightweight)
-- Break compatibility with VS Code ^1.80
+Run `pre-commit install` once per clone: it wires a pre-push gitleaks scan of
+the pushed commits. The repo is public and ships to the Marketplace, so a
+credential that reaches `main` is world-readable at once and must be rotated,
+not reverted; CI's `secret-scan.yml` is the backstop that `--no-verify` cannot
+skip. Commit no API keys, tokens or credentials. When a test fixture
+legitimately has to look like a key, add its path to the allowlist in
+`.gitleaks.toml` (a written, reviewable exemption) rather than assembling the
+key from fragments to dodge the scanner.
 
 ## Agent skills
 
