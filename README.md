@@ -184,6 +184,21 @@ If you see "CLI not found" errors:
 2. Reload the window: Cmd+Shift+P → "Developer: Reload Window"
 3. Check VS Code version: Must be 1.80.0 or higher
 
+## Versioning and support
+
+- **Versions** follow [semantic versioning](https://semver.org). While the
+  extension is below 1.0, a minor release (0.x.0) may change settings or
+  commands; every change is in [`CHANGELOG.md`](./CHANGELOG.md).
+- **Requirements:** VS Code 1.80.0 or later (`engines.vscode` in
+  [`package.json`](./package.json)) and the PromptGuard CLI, on any platform
+  the CLI ships for.
+- **API version:** the extension does not call the PromptGuard API itself
+  (its only download is the CLI, from GitHub Releases); it runs the CLI, which
+  calls PromptGuard's `/api/v1` API.
+- **Security fixes:** The 12-month security-fix window for a previous major version on that page is promised for the Python and Node.js SDKs, not for the extension: security fixes ship in a new release, so stay on the latest one.
+
+The full policy: [Versioning & support](https://docs.promptguard.co/versioning-and-support).
+
 ## Links
 
 - [PromptGuard Website](https://promptguard.co)
