@@ -32,7 +32,7 @@ Drop-in LLM security for your applications - directly in VS Code.
 ### Requirements
 
 - VS Code 1.80.0 or higher
-- PromptGuard CLI installed (see [CLI releases](https://github.com/acebot712/promptguard-cli/releases))
+- PromptGuard CLI installed (see [CLI releases](https://github.com/promptguardhq/promptguard-cli/releases))
 
 ---
 

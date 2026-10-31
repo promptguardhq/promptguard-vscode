@@ -273,7 +273,7 @@ async function checkCliInstallation(
     // Pre-fill the command WITHOUT executing it (addNewLine=false): the user
     // reviews the curl|sh line and presses Enter themselves.
     terminal.sendText(
-      "curl -fsSL https://raw.githubusercontent.com/acebot712/promptguard-cli/main/install.sh | sh",
+      "curl -fsSL https://raw.githubusercontent.com/promptguardhq/promptguard-cli/main/install.sh | sh",
       false,
     );
     output.appendLine(

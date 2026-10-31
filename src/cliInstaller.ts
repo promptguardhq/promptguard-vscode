@@ -13,7 +13,7 @@ const mkdir = promisify(fs.mkdir);
 const chmod = promisify(fs.chmod);
 
 const GITHUB_RELEASES_URL =
-  "https://api.github.com/repos/acebot712/promptguard-cli/releases/latest";
+  "https://api.github.com/repos/promptguardhq/promptguard-cli/releases/latest";
 const GITHUB_USER_AGENT = "PromptGuard-VSCode-Extension";
 const MAX_REDIRECTS = 5;
 /**
@@ -264,7 +264,7 @@ export async function installCli(
     output.appendLine(`Unsupported platform: ${os.platform()} ${os.arch()}`);
     void vscode.window.showErrorMessage(
       `PromptGuard CLI is not available for ${os.platform()} ${os.arch()}. ` +
-        "Please install manually from https://github.com/acebot712/promptguard-cli",
+        "Please install manually from https://github.com/promptguardhq/promptguard-cli",
     );
     return null;
   }

@@ -13,7 +13,7 @@
 ## Quick Start
 
 ```bash
-git clone https://github.com/acebot712/promptguard-vscode.git
+git clone https://github.com/promptguardhq/promptguard-vscode.git
 cd promptguard-vscode
 npm install
 pre-commit install          # Install pre-commit hooks
@@ -151,7 +151,7 @@ Marketplace publishing uses a Personal Access Token (the Marketplace has no OIDC
 
 ## Reporting Issues
 
-Open an issue at https://github.com/acebot712/promptguard-vscode/issues with:
+Open an issue at https://github.com/promptguardhq/promptguard-vscode/issues with:
 
 - VS Code version
 - Extension version

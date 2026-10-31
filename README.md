@@ -1,5 +1,5 @@
-[![CI](https://github.com/acebot712/promptguard-vscode/actions/workflows/ci.yml/badge.svg)](https://github.com/acebot712/promptguard-vscode/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/acebot712/promptguard-vscode)](https://github.com/acebot712/promptguard-vscode/blob/main/LICENSE)
+[![CI](https://github.com/promptguardhq/promptguard-vscode/actions/workflows/ci.yml/badge.svg)](https://github.com/promptguardhq/promptguard-vscode/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/promptguardhq/promptguard-vscode)](https://github.com/promptguardhq/promptguard-vscode/blob/main/LICENSE)
 
 # PromptGuard VS Code Extension
 
@@ -38,10 +38,10 @@ _PromptGuard Activity Bar view: status, managed files, and quick actions._
 ### 1. Install the PromptGuard CLI
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/acebot712/promptguard-cli/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/promptguardhq/promptguard-cli/main/install.sh | sh
 ```
 
-Or install manually from [GitHub Releases](https://github.com/acebot712/promptguard-cli/releases).
+Or install manually from [GitHub Releases](https://github.com/promptguardhq/promptguard-cli/releases).
 
 ### 2. Install the Extension
 
@@ -63,7 +63,7 @@ VSX, so it does not appear in the extension search of Cursor, Windsurf or other
 editors that use Open VSX. Install it from the VSIX file instead:
 
 1. Download `promptguard-vscode-<version>.vsix` from the
-   [latest GitHub release](https://github.com/acebot712/promptguard-vscode/releases/latest).
+   [latest GitHub release](https://github.com/promptguardhq/promptguard-vscode/releases/latest).
 2. In the editor, open the Command Palette and run
    **Extensions: Install from VSIX...**, then pick the downloaded file.
 
@@ -203,8 +203,8 @@ The full policy: [Versioning & support](https://docs.promptguard.co/versioning-a
 
 - [PromptGuard Website](https://promptguard.co)
 - [Documentation](https://docs.promptguard.co)
-- [CLI Repository](https://github.com/acebot712/promptguard-cli)
-- [Report Issues](https://github.com/acebot712/promptguard-vscode/issues)
+- [CLI Repository](https://github.com/promptguardhq/promptguard-cli)
+- [Report Issues](https://github.com/promptguardhq/promptguard-vscode/issues)
 
 ## License
 
