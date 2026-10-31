@@ -138,7 +138,7 @@ The release workflow (`.github/workflows/release.yml`):
 2. Creates a GitHub Release with the `.vsix` attached
 3. Publishes to the VS Code Marketplace via `npx vsce publish --packagePath`, so the Marketplace gets the exact `.vsix` attached to the GitHub Release
 
-Marketplace publishing requires a `VSCE_PAT` (Personal Access Token) secret in GitHub repo settings. Tags containing a hyphen (e.g., `v0.4.0-beta`) create a release but skip marketplace publishing.
+Marketplace publishing uses a Personal Access Token (the Marketplace has no OIDC publishing), stored in Google Secret Manager as `VSCODE_VSCE_PAT` and read by the release job at run time; GitHub holds no secrets. Tags containing a hyphen (e.g., `v0.4.0-beta`) create a release but skip marketplace publishing.
 
 ## PR Checklist
 

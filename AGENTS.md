@@ -43,6 +43,17 @@ legitimately has to look like a key, add its path to the allowlist in
 `.gitleaks.toml` (a written, reviewable exemption) rather than assembling the
 key from fragments to dodge the scanner.
 
+## GitHub holds no secrets
+
+**Change a secret in Secret Manager; GitHub holds none.** Workflows read every
+secret at run time from Google Secret Manager (`promptguard-production-472014`),
+signed in as this repository through Workload Identity; GitHub keeps only
+identifiers, as variables (`vars.*`). A workflow that names any `secrets.*` but
+`GITHUB_TOKEN` fails CI (`scripts/check_no_github_secrets.py`). The inventory,
+and how to add a secret with its per-secret grant:
+[`ENVIRONMENT_VARIABLES.md` § CI/CD-only](https://github.com/acebot712/promptguard/blob/main/docs/04_engineering/reference/ENVIRONMENT_VARIABLES.md#cicd-only)
+in the platform repo.
+
 ## Agent skills
 
 ### Issue tracker
