@@ -195,7 +195,7 @@ If you see "CLI not found" errors:
 - **API version:** the extension does not call the PromptGuard API itself
   (its only download is the CLI, from GitHub Releases); it runs the CLI, which
   calls PromptGuard's `/api/v1` API.
-- **Security fixes:** The 12-month security-fix window for a previous major version on that page is promised for the Python and Node.js SDKs, not for the extension: security fixes ship in a new release, so stay on the latest one.
+- **Security fixes:** The 12-month security-fix window for a previous major version, which [Versioning & support](https://docs.promptguard.co/versioning-and-support#sdks) promises, covers the Python and Node.js SDKs, not the extension: security fixes ship in a new release, so stay on the latest one.
 
 The full policy: [Versioning & support](https://docs.promptguard.co/versioning-and-support).
 
