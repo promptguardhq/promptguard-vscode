@@ -1,5 +1,7 @@
 # Change Log
 
+Product updates for every PromptGuard product, written for customers, are at [docs.promptguard.co/changelog](https://docs.promptguard.co/changelog); how long each version is supported is at [Versioning & support](https://docs.promptguard.co/versioning-and-support).
+
 All notable changes to the PromptGuard VS Code extension will be documented in this file.
 
 ## [Unreleased]
