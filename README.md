@@ -56,6 +56,26 @@ Or install from the command line:
 code --install-extension promptguard.promptguard-vscode
 ```
 
+#### Cursor, Windsurf and other VS Code forks
+
+The extension is published to the Visual Studio Marketplace only, not to Open
+VSX, so it does not appear in the extension search of Cursor, Windsurf or other
+editors that use Open VSX. Install it from the VSIX file instead:
+
+1. Download `promptguard-vscode-<version>.vsix` from the
+   [latest GitHub release](https://github.com/acebot712/promptguard-vscode/releases/latest).
+2. In the editor, open the Command Palette and run
+   **Extensions: Install from VSIX...**, then pick the downloaded file.
+
+Or from the command line, with the editor's own CLI:
+
+```bash
+cursor --install-extension promptguard-vscode-0.6.6.vsix
+windsurf --install-extension promptguard-vscode-0.6.6.vsix
+```
+
+A VSIX install does not update itself; repeat these steps for a new release.
+
 ## Usage
 
 ### Initialize PromptGuard
@@ -63,7 +83,7 @@ code --install-extension promptguard.promptguard-vscode
 1. Open Command Palette (Cmd+Shift+P / Ctrl+Shift+P)
 2. Run `PromptGuard: Initialize`
 3. Enter your API key when prompted
-4. Select providers (or press Escape to use all)
+4. Select providers: **All providers** is pre-selected, so press Enter to configure every detected provider. Pressing Escape here cancels initialization.
 
 ### Detect LLM SDKs
 
@@ -174,4 +194,3 @@ If you see "CLI not found" errors:
 ## License
 
 Apache 2.0
-
