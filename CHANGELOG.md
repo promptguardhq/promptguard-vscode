@@ -4,6 +4,22 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
 
 ## [Unreleased]
 
+### Changed
+
+- **The packaged extension no longer carries `scripts/`.** The release and
+  git-hook scripts were shipped inside every `.vsix`; `.vscodeignore` now
+  leaves them out.
+
+### Added
+
+- **Every Marketplace release is announced in Slack `#releases`.** The
+  release workflow's new `announce` job posts the version, its GitHub Release
+  and the Marketplace changelog after `publish`, through
+  `scripts/post-release.sh`, a copy of the platform repo's script. It reads
+  the `SLACK_RELEASES_WEBHOOK_URL` secret, and an unset secret or a Slack
+  failure is a warning, never a failed release. The Marketplace already
+  shows this file on its Changelog tab, because the package ships it.
+
 ## [0.6.6] - 2026-10-23
 
 **No change to how the extension behaves.** Only `SECURITY.md`, which ships
