@@ -6,6 +6,18 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
 
 ## [Unreleased]
 
+## [0.6.8] - 2026-11-03
+
+0.6.7 reached the GitHub release but not the Marketplace: its publish step
+could not read the Marketplace credential. 0.6.8 is the same extension,
+published to the Marketplace.
+
+### Fixed
+
+- **Releases publish to the Marketplace again.** The release workflow names
+  its Google Cloud project when it signs in, so it can read the credential it
+  publishes with.
+
 ## [0.6.7] - 2026-11-03
 
 The repositories moved to the `promptguardhq` GitHub organization, and the

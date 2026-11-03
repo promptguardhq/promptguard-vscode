@@ -70,8 +70,8 @@ editors that use Open VSX. Install it from the VSIX file instead:
 Or from the command line, with the editor's own CLI:
 
 ```bash
-cursor --install-extension promptguard-vscode-0.6.7.vsix
-windsurf --install-extension promptguard-vscode-0.6.7.vsix
+cursor --install-extension promptguard-vscode-0.6.8.vsix
+windsurf --install-extension promptguard-vscode-0.6.8.vsix
 ```
 
 A VSIX install does not update itself; repeat these steps for a new release.
