@@ -6,11 +6,32 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
 
 ## [Unreleased]
 
+## [0.6.7] - 2026-11-03
+
+The repositories moved to the `promptguardhq` GitHub organization, and the
+extension now points at the new location.
+
 ### Changed
 
+- **The PromptGuard CLI is downloaded from `promptguardhq/promptguard-cli`.**
+  The CLI installer, the install command the extension pre-fills in the
+  terminal, and the manual-install link all named the old repository
+  location, which only worked through GitHub's redirect.
 - **The packaged extension no longer carries `scripts/`.** The release and
   git-hook scripts were shipped inside every `.vsix`; `.vscodeignore` now
   leaves them out.
+- **The README says how to install in Cursor, Windsurf and other VS Code
+  forks** (from the `.vsix` on the GitHub release, since the extension is not
+  on Open VSX), that Escape cancels initialization, and how versions are
+  supported.
+
+### Security
+
+- **minimatch and glob advisories (GHSA-g3hv-75wg-m249, GHSA-3g3m-2fjr-6pw4),
+  and `@azure/msal-node`, `qs` and `serialize-javascript`, patched.**
+  Development and packaging dependencies only: the extension declares no
+  runtime dependencies, so none of them ship inside the `.vsix`. `npm audit`
+  still lists eslint's minimatch 3.1.5, which eslint keeps on purpose.
 
 ### Added
 
