@@ -49,7 +49,7 @@ suite("Status Bar Test Suite", () => {
     );
     await statusBar.updateStatus();
     assert.ok(statusBar.text.includes("Active"), `unexpected text: ${statusBar.text}`);
-    assert.ok(tooltipText(statusBar).includes("https://api.promptguard.co/api/v1"));
+    assert.strictEqual(tooltipText(statusBar), "Active | Proxy: https://api.promptguard.co/api/v1");
   });
 
   test("disabled status renders 'Disabled'", async () => {
