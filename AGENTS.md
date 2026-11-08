@@ -20,6 +20,10 @@ non-zero as failure has already shipped a bug here.
 **Read `docs/adr/0001-*` and `0002-*` before** changing how the CLI is invoked
 or its output parsed, adding a network call, or adding API types / a spec-sync
 workflow.
+`scripts/check-architecture.mjs` (in `scripts/check.sh` and CI's lint job)
+enforces this: `child_process` only in `src/cli.ts` and `src/cliInstaller.ts`,
+network modules and `fetch(` only in `src/cliInstaller.ts`, no source naming
+the API host, and no runtime `dependencies`.
 
 ## Constraints
 

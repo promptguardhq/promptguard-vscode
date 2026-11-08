@@ -16,6 +16,9 @@ python3 scripts/check_no_github_secrets.py --check
 python3 scripts/check_agent_files.py --check
 python3 scripts/check_no_dashes.py --check
 
+step "architecture fitness: CLI-only backend, no network, zero runtime deps"
+node scripts/check-architecture.mjs
+
 step "lint and format"
 npm run lint --silent
 npm run format:check --silent

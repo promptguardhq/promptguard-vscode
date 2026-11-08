@@ -60,6 +60,13 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
+      # ADR-0001 as a gate: only src/cli.ts and src/cliInstaller.ts spawn
+      # processes, only the installer touches the network, nothing names the
+      # API host, and package.json has no runtime dependencies. Rules in the
+      # script's header; dependency-free, so it needs no npm ci.
+      - name: Architecture fitness check
+        run: node scripts/check-architecture.mjs
+
       - name: Install dependencies
         run: npm ci
 
