@@ -139,7 +139,7 @@ suite("Tree View Test Suite", () => {
   test("getChildren returns empty when the CLI is unavailable (welcome takes over)", async () => {
     // A thrown status() means the CLI could not answer (missing/failed). The
     // tree returns [] so the "CLI unavailable" welcome content shows an
-    // Install/Update CLI action — it must NOT misdiagnose this as
+    // Install/Update CLI action: it must NOT misdiagnose this as
     // "not initialized" and offer to Initialize.
     const cli = {
       status: () => Promise.reject(new Error("CLI not found")),

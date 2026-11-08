@@ -1,7 +1,7 @@
 # Exit code 2 from the CLI means success, not failure
 
-The CLI exits 2 when it finds something — a blocked threat, or unprotected LLM
-call sites — with complete, valid JSON on stdout. It exits 0 when it finds
+The CLI exits 2 when it finds something, a blocked threat, or unprotected LLM
+call sites, with complete, valid JSON on stdout. It exits 0 when it finds
 nothing and 1 on a real error. The extension therefore cannot treat a non-zero
 exit as a failed command: it has to know which non-zero codes still carry
 output worth parsing, and `CliWrapper` takes that set per call.

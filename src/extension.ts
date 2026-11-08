@@ -133,7 +133,7 @@ export function activate(context: vscode.ExtensionContext): void {
     await checkCliInstallation(context, cli, outputChannel);
     void statusBar.updateStatus();
     // Resolve cliAvailable BEFORE the first-run notice so we only claim
-    // end-to-end readiness once the CLI is confirmed — otherwise the "ready"
+    // end-to-end readiness once the CLI is confirmed, otherwise the "ready"
     // toast could co-exist with checkCliInstallation's "CLI not found" warning.
     await updateContextKeys(cli, contextState);
     void diagnostics.scanAllWorkspaceFolders();
@@ -152,7 +152,7 @@ async function showFirstRunNotice(
   if (context.globalState.get<boolean>(FIRST_RUN_NOTICE_KEY)) {
     return;
   }
-  // Don't claim "ready" while the CLI is missing — checkCliInstallation is
+  // Don't claim "ready" while the CLI is missing, checkCliInstallation is
   // already surfacing its own "CLI not found" guidance, and the two toasts
   // would contradict each other. Leave the flag unset so the notice can still
   // fire on a later run once the CLI becomes available.
@@ -169,10 +169,10 @@ async function showFirstRunNotice(
  * The two context keys that drive the Activity Bar view's welcome content
  * (contributes.viewsWelcome in package.json):
  *
- *   - promptguard.cliAvailable — false when the CLI cannot answer at all
+ *   - promptguard.cliAvailable, false when the CLI cannot answer at all
  *     (missing binary, spawn/timeout failure, unparseable output). Mirrors the
  *     status bar's "Unavailable" state.
- *   - promptguard.initialized  — true only when the CLI reports a genuine
+ *   - promptguard.initialized, true only when the CLI reports a genuine
  *     initialized project ({"initialized": true}).
  *
  * Deriving both from a single cli.status() call keeps them consistent with the

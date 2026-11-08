@@ -12,5 +12,5 @@ and shown on the VS Code Marketplace listing.
 The current images are **faithful renders** built from the extension's actual UI
 strings, the VS Code Dark+ palette, and the official `@vscode/codicons` icon set
 (2560×1440, 2× DPI). To replace any of them with a live screen capture, just keep
-the exact filenames — the Markdown references in `README.md` pick them up
+the exact filenames, the Markdown references in `README.md` pick them up
 automatically.

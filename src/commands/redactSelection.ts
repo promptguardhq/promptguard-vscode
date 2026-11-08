@@ -9,7 +9,7 @@ export async function redactSelectionCommand(
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     void vscode.window.showWarningMessage(
-      "No active editor — open a file and select text to redact.",
+      "No active editor: open a file and select text to redact.",
     );
     return;
   }
@@ -42,7 +42,7 @@ export async function redactSelectionCommand(
 
         const result = await cli.redactText(selectedText);
 
-        // Log PII types ONLY — never the original PII values. The output
+        // Log PII types ONLY, never the original PII values. The output
         // channel is plaintext and can end up in logs/screenshots.
         // The CLI returns `piiFound` as a list of PII type names
         // (promptguard-cli/src/commands/redact.rs, RedactResponse).
@@ -55,7 +55,7 @@ export async function redactSelectionCommand(
         if (piiCount > 0) {
           if (document.version !== versionAtCapture) {
             void vscode.window.showErrorMessage(
-              "PromptGuard: The document changed while redacting — no text was replaced. " +
+              "PromptGuard: The document changed while redacting, no text was replaced. " +
                 "Re-select the text and run the command again.",
             );
             return;
@@ -66,7 +66,7 @@ export async function redactSelectionCommand(
           if (!applied) {
             void vscode.window.showErrorMessage(
               "PromptGuard: Could not apply the redacted text to the editor. " +
-                "The document may have changed — re-select the text and try again.",
+                "The document may have changed, re-select the text and try again.",
             );
             return;
           }

@@ -17,7 +17,7 @@ class CategoryTreeItem extends vscode.TreeItem {
 /**
  * Resolve a managed-file path from CLI output to an openable URI. The CLI
  * reports paths relative to the project root, so relative paths must be
- * joined against the workspace folder — Uri.file() on a relative path yields
+ * joined against the workspace folder, Uri.file() on a relative path yields
  * a broken URI and click-to-open fails. Exported for tests.
  */
 export function resolveManagedFileUri(
@@ -33,7 +33,7 @@ export function resolveManagedFileUri(
 /**
  * Build a tree item for a managed file. Every entry in the CLI's
  * `status --json` `managed_files` list is, by definition, a file PromptGuard
- * manages — the CLI exposes no per-file "protected vs pending" flag (it is a
+ * manages: the CLI exposes no per-file "protected vs pending" flag (it is a
  * flat path list; see promptguard-cli status.rs `config.metadata.files_managed`).
  * So a managed file always renders as protected; there is no "not yet
  * protected" state to distinguish here (unprotected SDK usage surfaces as
@@ -41,7 +41,7 @@ export function resolveManagedFileUri(
  */
 export function createFileItem(filePath: string, workspaceFolderUri?: vscode.Uri): vscode.TreeItem {
   const item = new vscode.TreeItem(filePath, vscode.TreeItemCollapsibleState.None);
-  item.tooltip = `${filePath} — Protected by PromptGuard`;
+  item.tooltip = `${filePath}, Protected by PromptGuard`;
   item.iconPath = new vscode.ThemeIcon("shield", new vscode.ThemeColor("charts.green"));
   item.command = {
     command: "vscode.open",
@@ -104,7 +104,7 @@ export class PromptGuardTreeDataProvider implements vscode.TreeDataProvider<vsco
       status = this.cachedStatus;
     } catch {
       // cli.status() threw: the CLI could not answer at all (missing binary,
-      // spawn/timeout failure, unparseable output) — distinct from a genuine
+      // spawn/timeout failure, unparseable output), distinct from a genuine
       // {"initialized": false}. Returning [] hands the view over to the
       // "CLI unavailable" welcome content (contributes.viewsWelcome, gated on
       // !promptguard.cliAvailable), which points at Install/Update CLI rather

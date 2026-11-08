@@ -39,7 +39,7 @@ export class PromptGuardDiagnostics {
   }
 
   activate(context: vscode.ExtensionContext): void {
-    // NOTE: no initial scan here — extension.ts triggers the first scan after
+    // NOTE: no initial scan here, extension.ts triggers the first scan after
     // CLI resolution/installation completes, so the two never race.
     const fileWatcher = vscode.workspace.onDidSaveTextDocument((document) => {
       if (!this.isScanOnSaveEnabled()) {

@@ -37,7 +37,7 @@ export class PromptGuardCodeActionProvider implements vscode.CodeActionProvider 
           title: "Apply Protection",
         };
         applyAction.diagnostics = [diagnostic];
-        // Apply is only preferred once the project is initialized — otherwise a
+        // Apply is only preferred once the project is initialized, otherwise a
         // single click runs `apply`, which fails before `init` has been run.
         applyAction.isPreferred = initialized;
 

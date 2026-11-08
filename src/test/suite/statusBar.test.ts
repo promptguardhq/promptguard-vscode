@@ -60,14 +60,14 @@ suite("Status Bar Test Suite", () => {
     assert.ok(statusBar.text.includes("Disabled"), `unexpected text: ${statusBar.text}`);
   });
 
-  test("status failure renders 'Unavailable' with the cause — NOT 'Not initialized'", async () => {
+  test("status failure renders 'Unavailable' with the cause, NOT 'Not initialized'", async () => {
     // Regression: CLI-missing/timeout/parse failures all rendered
     // "Not initialized", telling the user to re-init a workspace that may be
     // fully initialized while the real problem (e.g. missing binary) is hidden.
     statusBar = new PromptGuardStatusBar(
       stubCli(() =>
         Promise.reject(
-          new CliExecutionError("Command failed: promptguard status --json — timed out after 30s"),
+          new CliExecutionError("Command failed: promptguard status --json, timed out after 30s"),
         ),
       ),
     );

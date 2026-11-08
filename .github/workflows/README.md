@@ -4,16 +4,16 @@
 
 `release.yml` fires on a `v*` tag and:
 
-1. **`notes-gate`** — refuses the release unless `CHANGELOG.md` has a non-empty
+1. **`notes-gate`**: refuses the release unless `CHANGELOG.md` has a non-empty
    section for this version.
-2. **`build`** — verifies the tag matches `package.json`, installs, lints,
+2. **`build`**: verifies the tag matches `package.json`, installs, lints,
    compiles, runs the tests under `xvfb`, packages the `.vsix`, uploads it as
    the `extension` artifact, and creates the GitHub Release with it attached.
-3. **`publish`** — downloads that **same** `.vsix` and publishes it to the VS
+3. **`publish`**: downloads that **same** `.vsix` and publishes it to the VS
    Code Marketplace with `vsce publish --packagePath`.
 
 Step 3 is worth reading twice. It used to re-checkout and re-run `vsce publish`,
-which repackages from source — so the Marketplace got a *different build* from
+which repackages from source, so the Marketplace got a *different build* from
 the one attached to the Release and exercised by the tests. It now publishes the
 tested bytes.
 
@@ -26,7 +26,7 @@ fails the release** rather than skipping quietly.
 
 That is the correct behaviour and should stay. A publish step that silently
 skips when its credential is missing is how you ship a tag that looks released
-and never reached anyone — the same failure this project has already hit twice
+and never reached anyone, the same failure this project has already hit twice
 elsewhere (a secret scanner with no API key, and an API-contract gate with no
 token, both reporting success for months while doing nothing).
 
@@ -37,7 +37,7 @@ To enable publishing:
 
 ### How to release
 
-1. Add the version's section to `CHANGELOG.md` — `notes-gate` rejects the tag
+1. Add the version's section to `CHANGELOG.md`: `notes-gate` rejects the tag
    otherwise.
 2. Bump `version` in `package.json`, commit, push.
 3. Tag and push:

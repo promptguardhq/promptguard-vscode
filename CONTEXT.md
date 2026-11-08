@@ -11,7 +11,7 @@ PromptGuard CLI and reading what it prints.
 
 **Extension**:
 This package, as VS Code names the thing a user installs from the Marketplace.
-_Avoid_: plugin — `promptguard-plugin` is a different repository (the
+_Avoid_: plugin, `promptguard-plugin` is a different repository (the
 multi-host agent plugin), and calling both "the plugin" has already cost a
 conversation the time to work out which was meant. Also avoid: add-on, IDE
 integration.
@@ -24,8 +24,8 @@ _Avoid_: client, service, adapter, runner
 ### The contract with the CLI
 
 **Findings exit**:
-The CLI's exit code 2, meaning "I ran successfully and found something" — a
-threat, or an unprotected call site — with complete output on stdout. It is
+The CLI's exit code 2, meaning "I ran successfully and found something", a
+threat, or an unprotected call site, with complete output on stdout. It is
 distinct from an error exit, which carries nothing worth parsing. Treating any
 non-zero exit as failure made the extension report a failed scan at exactly the
 moments it had something to say.
@@ -37,13 +37,13 @@ This, and not the PromptGuard API, is what the extension is written against.
 _Avoid_: API contract, CLI API, protocol
 
 **CLI-owned shape**:
-Output the CLI assembles itself — a project scan, a status report, a project
+Output the CLI assembles itself, a project scan, a status report, a project
 list. The CLI is free to change these, and only this repo has to follow.
 _Avoid_: CLI response, local shape
 
 **Forwarded shape**:
 Output the CLI parses from the PromptGuard API and re-emits unchanged, so the
-API's own field names arrive here verbatim — a threat scan result, a redaction
+API's own field names arrive here verbatim, a threat scan result, a redaction
 result. The CLI is a pass-through for these, not a translator, which means a
 field renamed in the API reaches this extension even though it never calls the
 API.
@@ -58,7 +58,7 @@ _Avoid_: instance, usage, occurrence
 
 **Diagnostic**:
 The editor marking on a call site, and its entry in the Problems panel. It
-reports *coverage* — whether that call is routed through PromptGuard — never
+reports *coverage*, whether that call is routed through PromptGuard, never
 whether any content is malicious.
 _Avoid_: error, warning (those name one severity, not the concept), problem,
 issue, finding

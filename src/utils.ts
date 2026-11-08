@@ -18,7 +18,7 @@ const BILLING_URL = "https://app.promptguard.co/billing";
 /**
  * Whether an error indicates the PromptGuard plan quota was exceeded. The
  * CLI reports API errors on stderr (`Error: ... quota exceeded ...`), which
- * CliExecutionError captures separately from its message — so both must be
+ * CliExecutionError captures separately from its message, so both must be
  * inspected. Exported so tests exercise the real predicate.
  */
 export function isQuotaError(error: unknown): boolean {

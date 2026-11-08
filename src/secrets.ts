@@ -18,7 +18,7 @@ export function validateApiKeyInput(value: string): string | null {
   }
   // Guard against an obviously-truncated paste (real keys are far longer).
   if (trimmed.length < 12) {
-    return "That key looks incomplete — check you copied the whole key.";
+    return "That key looks incomplete, check you copied the whole key.";
   }
   return null;
 }
@@ -51,7 +51,7 @@ export class SecretsManager {
     });
 
     if (apiKey) {
-      // Trim once and use the same value for storage and the return value —
+      // Trim once and use the same value for storage and the return value,
       // callers (e.g. init) pass the returned key straight to the CLI, so a
       // stored/returned mismatch would mean two different keys in play.
       const trimmed = apiKey.trim();

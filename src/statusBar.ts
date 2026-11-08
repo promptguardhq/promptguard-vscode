@@ -38,7 +38,7 @@ export class PromptGuardStatusBar {
     const generation = ++this.updateGeneration;
     try {
       const status = await this.cli.status();
-      // A newer update started while this cli.status() was in flight — drop
+      // A newer update started while this cli.status() was in flight, drop
       // this (older, possibly stale) result rather than repaint over it.
       if (generation !== this.updateGeneration) {
         return;
@@ -50,8 +50,8 @@ export class PromptGuardStatusBar {
       }
       // "Not initialized" is reserved for a genuine CLI answer
       // ({"initialized": false}, which `status --json` reports with exit 0).
-      // A thrown error here means we could not get an answer at all — CLI
-      // missing, spawn/timeout failure, unparseable output — so we render a
+      // A thrown error here means we could not get an answer at all, CLI
+      // missing, spawn/timeout failure, unparseable output, so we render a
       // distinct "Unavailable" state (rather than keeping the last-known
       // state, which could go stale silently) and surface the cause in the
       // tooltip. CliExecutionError messages are already sanitized.

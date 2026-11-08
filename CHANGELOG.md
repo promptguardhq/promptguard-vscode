@@ -124,7 +124,7 @@ version bump is not unexplained.
 
 ### Fixed
 
-- `npm test` runs on macOS again — `@vscode/test-electron` needed a bump (#33).
+- `npm test` runs on macOS again, `@vscode/test-electron` needed a bump (#33).
 
 Dependency updates in this release are development-scope. The extension
 declares no runtime dependencies at all, so none of them ship inside the
@@ -136,7 +136,7 @@ packaged `.vsix`.
 
 - Patched eight dependency advisories: `fast-uri`, `undici`, `js-yaml` and
   `brace-expansion`. All are development-scope, so none of them ship inside the
-  packaged extension and **no behaviour changes for users** — this release exists
+  packaged extension and **no behaviour changes for users**: this release exists
   so the repository reports clean.
 
 ## [0.6.0] - 2026-06-01
@@ -144,7 +144,7 @@ packaged `.vsix`.
 ### Added
 
 - Marketplace screenshots (inline diagnostics + quick-fix, status-bar states, sidebar view).
-- `promptguard.autoInstallCli` now supports `auto` — silently install the CLI when it's not found — matching the documented behavior.
+- `promptguard.autoInstallCli` now supports `auto`: silently install the CLI when it's not found, matching the documented behavior.
 - `promptguard.scanOnSave` setting to re-scan the workspace when a supported file is saved (debounced).
 - Sidebar quick actions for **Set API Key** and **Select Project**, plus a one-time first-run notice.
 

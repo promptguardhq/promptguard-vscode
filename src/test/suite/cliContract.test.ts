@@ -21,14 +21,14 @@ const FAKE_KEY = ["pg", "live", "supersecret1234"].join("_");
 //   - Exit codes: 0 = clean/allow, 2 = findings/block, 1 = error
 //     (promptguard-cli/src/commands/scan.rs EXIT_CLEAN/EXIT_FINDINGS and
 //     promptguard-cli/src/main.rs which exits 1 on Err).
-//   - Security scan JSON: SecurityScanResponse in scan.rs — `blocked`,
+//   - Security scan JSON: SecurityScanResponse in scan.rs, `blocked`,
 //     `decision`, `confidence`, `reason` plus serde-renamed `threatType`,
 //     `eventId`, `processingTimeMs` (null when absent).
-//   - Local SDK scan JSON: scan.rs print_json — `total_files_scanned`,
+//   - Local SDK scan JSON: scan.rs print_json, `total_files_scanned`,
 //     `files_with_sdks`, `total_instances`, `providers[]`.
-//   - Redact JSON: RedactResponse in redact.rs — `{ original, redacted,
+//   - Redact JSON: RedactResponse in redact.rs, `{ original, redacted,
 //     piiFound }` where piiFound is a list of PII type names.
-//   - Status JSON: status.rs — `initialized`, `status`, `api_key`,
+//   - Status JSON: status.rs, `initialized`, `status`, `api_key`,
 //     `proxy_url`, `configuration{...}`.
 //
 // The regression under test: the CLI exits 2 WITH valid JSON on stdout when
@@ -200,7 +200,7 @@ if (args[0] === "disable" || args[0] === "enable") {
   // Mimic the real CLI's confirm prompt: BLOCK reading stdin until EOF
   // before doing anything. If the wrapper leaves the child's stdin pipe
   // open, this read never returns, the command hangs until its timeout
-  // SIGTERMs it, and the test fails — exactly the original disable/enable
+  // SIGTERMs it, and the test fails, exactly the original disable/enable
   // bug. Completing at all proves the wrapper closed stdin.
   fs.readFileSync(0, "utf8");
   if (!args.includes("--yes")) {
@@ -248,7 +248,7 @@ suite("CLI Contract Test Suite (stub binary, real exit codes)", function () {
     fs.writeFileSync(stubPath, buildStubScript(), { mode: 0o755 });
 
     // The key-plumbing tests assert on the CHILD's PROMPTGUARD_API_KEY, which
-    // is inherited from this process when the wrapper does not inject one —
+    // is inherited from this process when the wrapper does not inject one,
     // so clear any ambient value for deterministic results.
     previousEnvApiKey = process.env["PROMPTGUARD_API_KEY"];
     delete process.env["PROMPTGUARD_API_KEY"];
@@ -289,7 +289,7 @@ suite("CLI Contract Test Suite (stub binary, real exit codes)", function () {
     assert.strictEqual(result.blocked, true);
     assert.strictEqual(result.decision, "block");
     assert.strictEqual(result.confidence, 0.97);
-    // camelCase per the serde renames in scan.rs — NOT threat_type.
+    // camelCase per the serde renames in scan.rs, NOT threat_type.
     assert.strictEqual(result.threatType, "prompt_injection");
     assert.strictEqual(result.eventId, "evt_123");
     assert.strictEqual(result.processingTimeMs, 41.5);
@@ -387,7 +387,7 @@ suite("CLI Contract Test Suite (stub binary, real exit codes)", function () {
   // execFile pipes stdin and never closed it, so the prompt waited forever,
   // the 30s timeout SIGTERMed the child, and the state never toggled. The
   // stub's disable/enable branch BLOCKS reading stdin to EOF before exiting,
-  // so these tests only pass because the wrapper closes the child's stdin —
+  // so these tests only pass because the wrapper closes the child's stdin,
   // and it exits 1 unless --yes was passed.
   // --------------------------------------------------------------------
 

@@ -150,7 +150,7 @@ Click the status bar to view detailed status.
 
 ## Sidebar
 
-Open the shield icon in the Activity Bar for the PromptGuard view. Before setup it shows a welcome panel that either offers to **Initialize PromptGuard** / **Detect LLM SDKs**, or — if the CLI isn't found — points you at **Install/Update CLI**. Once initialized it shows current status, managed files, and an **Actions** group with quick buttons to Detect / Enable Protection / Disable Protection, plus **Set API Key** and **Select Project** so you can configure a key or switch projects without opening the Command Palette. Use the refresh icon in the view title bar to update both the tree and the status bar.
+Open the shield icon in the Activity Bar for the PromptGuard view. Before setup it shows a welcome panel that either offers to **Initialize PromptGuard** / **Detect LLM SDKs**, or, if the CLI isn't found, points you at **Install/Update CLI**. Once initialized it shows current status, managed files, and an **Actions** group with quick buttons to Detect / Enable Protection / Disable Protection, plus **Set API Key** and **Select Project** so you can configure a key or switch projects without opening the Command Palette. Use the refresh icon in the view title bar to update both the tree and the status bar.
 
 ## Supported Languages
 

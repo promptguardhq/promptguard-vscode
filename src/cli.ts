@@ -110,7 +110,7 @@ interface ExecOptions {
    * Marks a command that calls the PromptGuard API and therefore needs an
    * API key (scan --file, redact, projects ...). When set and the injected
    * key provider (VS Code SecretStorage, populated by "Set API Key") returns
-   * a key, it is supplied to the CLI via PROMPTGUARD_API_KEY — so running
+   * a key, it is supplied to the CLI via PROMPTGUARD_API_KEY, so running
    * "Set API Key" alone is enough to use API-backed commands. When no key is
    * stored, the environment is left untouched and the CLI falls back to its
    * own credential chain (env var / config / keyring).
@@ -271,13 +271,13 @@ export class CliWrapper {
             // embed in the error message (they should never be there anyway).
             // Include a sanitized first line of stderr so the user-facing
             // toast explains WHY the command failed, not just that it did.
-            const detail = stderr ? ` — ${sanitizeCliOutputLine(stderr)}` : "";
+            const detail = stderr ? `: ${sanitizeCliOutputLine(stderr)}` : "";
             // execFile sets `killed` when it terminated the child itself,
             // which for our options means the timeout fired. For a command
             // that rewrites workspace files, that is not just a failure: the
             // workspace may be mid-transformation.
             const timedOut = error.killed === true && exitCode === undefined;
-            const timeoutDetail = timedOut ? ` — timed out after ${timeout / 1000}s` : "";
+            const timeoutDetail = timedOut ? `: timed out after ${timeout / 1000}s` : "";
             const mutationHint = timedOut && options?.mutating ? ` ${MUTATION_TIMEOUT_HINT}` : "";
             reject(
               new CliExecutionError(
@@ -303,8 +303,8 @@ export class CliWrapper {
 
   /**
    * Resolve the API key stored via "Set API Key", if any. A SecretStorage
-   * failure must not break the command itself — the CLI's own credential
-   * chain still applies — so errors resolve to undefined.
+   * failure must not break the command itself, the CLI's own credential
+   * chain still applies, so errors resolve to undefined.
    */
   private async resolveStoredApiKey(): Promise<string | undefined> {
     if (!this.storedApiKeyProvider) {

@@ -9,7 +9,7 @@ export async function scanSelectionCommand(
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     void vscode.window.showWarningMessage(
-      "No active editor — open a file and select text to scan.",
+      "No active editor: open a file and select text to scan.",
     );
     return;
   }

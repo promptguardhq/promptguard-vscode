@@ -10,7 +10,7 @@ steps are in `CONTRIBUTING.md`.
 Every scan, redaction, status and project lookup shells out to the CLI through
 `src/cli.ts` and parses its stdout; the extension never calls
 `api.promptguard.co`. Its contract is the CLI's stdout and exit codes, and
-**exit 2 means findings with valid JSON on stdout**, not failure — treating
+**exit 2 means findings with valid JSON on stdout**, not failure, treating
 non-zero as failure has already shipped a bug here.
 `src/test/suite/cliContract.test.ts` pins that contract against a stub binary.
 **Read `docs/adr/0001-*` and `0002-*` before** changing how the CLI is invoked
