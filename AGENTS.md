@@ -1,5 +1,9 @@
 # AGENTS.md
 
+| Owner | Last reviewed |
+|---|---|
+| @cto | 2026-11-09 |
+
 VS Code extension for PromptGuard: flags unprotected LLM SDK call sites as
 diagnostics, and drives the PromptGuard CLI for scanning, fixing and status.
 Scripts are in `package.json`; contributor workflow, test-file map and CI
@@ -61,6 +65,8 @@ identifiers, as variables (`vars.*`). A workflow that names any `secrets.*` but
 and how to add a secret with its per-secret grant:
 [`ENVIRONMENT_VARIABLES.md` § CI/CD-only](https://github.com/promptguardhq/promptguard/blob/main/docs/04_engineering/reference/ENVIRONMENT_VARIABLES.md#cicd-only)
 in the platform repo.
+
+`.claude/settings.json` (committed) denies Claude Code reads of real `.env` files. Machine-only permissions go in `.claude/settings.local.json`.
 
 ## Agent skills
 
