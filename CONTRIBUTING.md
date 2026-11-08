@@ -100,11 +100,11 @@ The `--no-dependencies` flag is used because the extension has no runtime npm de
 
 ## CI/CD
 
-CI runs on every push to `main` and on PRs (`.github/workflows/ci.yml`), as two jobs:
+CI runs on every push to `main` and on PRs into `main` (`.github/workflows/ci.yml`), as two jobs. Changes that touch only Markdown, `docs/`, `LICENSE*`, `.gitignore`, `.editorconfig` or `.vscodeignore` skip both jobs; the secret scan below still runs on them.
 
 | Job | What it does |
 |---|---|
-| **Lint and Format** | `npm run lint` (ESLint) + `npm run format:check` (Prettier) |
+| **Lint and Format** | GitHub-holds-no-secrets check, agent-file and no-dashes checks, architecture fitness check (`scripts/check-architecture.mjs`), `npm run lint` (ESLint) + `npm run format:check` (Prettier) |
 | **Test and Build** | `npm run compile` (tsc), checks `out/extension.js` exists, `xvfb-run -a npm test` (headless VS Code on Linux), then `npx vsce package --no-dependencies` (verify the VSIX builds) |
 
 Secret scanning (gitleaks) runs on every push and PR in `.github/workflows/secret-scan.yml`, kept out of `ci.yml` so docs-only commits are still scanned.
