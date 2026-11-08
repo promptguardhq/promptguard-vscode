@@ -70,7 +70,7 @@ and how to add a secret with its per-secret grant:
 [`ENVIRONMENT_VARIABLES.md` § CI/CD-only](https://github.com/promptguardhq/promptguard/blob/main/docs/04_engineering/reference/ENVIRONMENT_VARIABLES.md#cicd-only)
 in the platform repo.
 
-`.claude/settings.json` (committed) denies Claude Code reads of real `.env` files. Machine-only permissions go in `.claude/settings.local.json`.
+`.claude/settings.json` (committed) denies Claude Code reads of real `.env` files. It also turns on Claude Code's sandbox for Bash: network only to the hosts in `sandbox.network.allowedDomains`, writes only to the workspace and tool caches; a host a command needs that is not listed shows as a sandbox prompt, so add it there with the reason. The VS Code test run (`npm test`, and so the full `bash scripts/check.sh`) runs outside it (`excludedCommands`): Electron needs macOS Mach services the sandbox refuses; `bash scripts/check.sh --fast` stays sandboxed. Machine-only permissions go in `.claude/settings.local.json`.
 
 ## Agent skills
 
