@@ -26,6 +26,14 @@ workflow.
   `@types/vscode` resolves to a much newer version, so `tsc` passing does not
   prove an API exists in 1.80; check the API's introduction version.
 
+## Before you hand back a change
+
+**Run `bash scripts/check.sh`** (after `npm ci`). It is CI's lint, format,
+compile and test jobs as one command, about four minutes because the tests
+drive a real VS Code. Done means it passes and any behaviour you changed has a
+test. The pre-push hook runs `bash scripts/check.sh --fast`, which skips the
+VS Code run.
+
 ## Testing
 
 `npm test` compiles first, then launches a real VS Code via
