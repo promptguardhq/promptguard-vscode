@@ -6,6 +6,19 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
 
 ## [Unreleased]
 
+## [0.6.9] - 2026-11-10
+
+Wording and documentation changes only; nothing the extension does has changed.
+
+### Changed
+
+- **Messages read more plainly.** Warnings, error details and tooltips no
+  longer use long dashes: "No active editor: open a file and select text to
+  scan.", a CLI failure reads "...: timed out after 30s", and a protected file's
+  tooltip reads "<file>, Protected by PromptGuard".
+- **The README says `promptguard.cliPath` and `promptguard.autoInstallCli` are
+  machine-scoped**, so a workspace setting cannot override them.
+
 ## [0.6.8] - 2026-11-03
 
 0.6.7 reached the GitHub release but not the Marketplace: its publish step
