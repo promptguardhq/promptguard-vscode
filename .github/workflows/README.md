@@ -21,8 +21,8 @@ tested bytes.
 
 This file previously said publishing happens "if `VSCE_PAT` is set". That was
 never true, and the difference matters: `publish` is gated only on the tag shape
-(`v*`, no pre-release suffix), so **on a matching tag with no `VSCE_PAT` the job
-fails the release** rather than skipping quietly.
+(`v*`, no pre-release suffix), so **on a matching tag with no `VSCODE_VSCE_PAT`
+secret in Secret Manager the job fails the release** rather than skipping quietly.
 
 That is the correct behaviour and should stay. A publish step that silently
 skips when its credential is missing is how you ship a tag that looks released
@@ -33,7 +33,7 @@ token, both reporting success for months while doing nothing).
 To enable publishing:
 
 1. Get a Personal Access Token from <https://marketplace.visualstudio.com/manage>
-2. Add it as a repository secret named `VSCE_PAT`
+2. Store it in Google Secret Manager (`promptguard-production-472014`) as `VSCODE_VSCE_PAT`, with the per-secret grant for the release identity. GitHub holds no secrets: the `publish` job reads it at run time (see `AGENTS.md`, "GitHub holds no secrets").
 
 ### How to release
 
