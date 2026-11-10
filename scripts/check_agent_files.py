@@ -3,7 +3,8 @@
 
 """Fail when an agent instruction file is broken, bloated, or not loaded.
 
-Agent files are every tracked `AGENTS.md` and `CLAUDE.md`, plus `docs/agents/**/*.md`.
+Agent files are every tracked `AGENTS.md` and `CLAUDE.md`, plus `docs/agents/**/*.md` and
+the Markdown under `.claude/rules/`, `.claude/skills/` and `.claude/agents/`.
 An agent reads them as true, so a dead link, a placeholder or a file the agent
 never loads costs a session silently. Four checks:
 
@@ -77,8 +78,13 @@ def agent_files(files: list[str]) -> list[str]:
     picked = []
     for rel in files:
         name = rel.rsplit("/", 1)[-1]
-        if name in ("AGENTS.md", "CLAUDE.md") or (
-            rel.startswith("docs/agents/") and rel.endswith(".md")
+        if (
+            name in ("AGENTS.md", "CLAUDE.md")
+            or (rel.startswith("docs/agents/") and rel.endswith(".md"))
+            or (
+                rel.startswith((".claude/rules/", ".claude/skills/", ".claude/agents/"))
+                and rel.endswith(".md")
+            )
         ):
             if "node_modules/" not in rel:
                 picked.append(rel)
