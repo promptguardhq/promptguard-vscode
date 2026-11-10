@@ -62,7 +62,7 @@ export async function initCommand(
         );
 
         if (openSignup === "Open Browser") {
-          void vscode.env.openExternal(vscode.Uri.parse("https://app.promptguard.co/signup"));
+          void vscode.env.openExternal(vscode.Uri.parse("https://app.promptguard.co/register"));
         }
 
         const continueAfterSignup = await vscode.window.showQuickPick(

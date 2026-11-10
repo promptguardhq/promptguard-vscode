@@ -13,7 +13,7 @@ export function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-const BILLING_URL = "https://app.promptguard.co/billing";
+const BILLING_URL = "https://app.promptguard.co/dashboard/billing";
 
 /**
  * Whether an error indicates the PromptGuard plan quota was exceeded. The

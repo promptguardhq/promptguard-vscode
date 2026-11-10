@@ -6,6 +6,15 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
 
 ## [Unreleased]
 
+### Fixed
+
+- **"Sign up / Get API key" opens the sign-up page.** It opened
+  `app.promptguard.co/signup`, which does not exist, so a new user's first
+  click landed on "page not found". It now opens `app.promptguard.co/register`.
+- **The upgrade prompt shown when your plan's quota runs out opens Billing.**
+  It opened `app.promptguard.co/billing`, also a missing page; it now opens
+  `app.promptguard.co/dashboard/billing`.
+
 ## [0.6.9] - 2026-11-10
 
 Wording and documentation changes only; nothing the extension does has changed.
