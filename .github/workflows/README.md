@@ -56,7 +56,7 @@ formatting nit does not wait behind the test run:
 
 | Job | Does |
 |---|---|
-| `lint` | `npm run lint`, `npm run format:check` |
+| `lint` | the GitHub-secrets, agent-file and dash checks, the architecture fitness check (`scripts/check-architecture.mjs`), `npm run lint`, `npm run format:check` |
 | `test` | compile, assert `out/extension.js` exists, `xvfb-run npm test`, `vsce package` |
 
 Neither gates the other; both report as soon as they know.
