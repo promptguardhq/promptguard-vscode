@@ -117,9 +117,9 @@ Example: `/usr/local/bin/promptguard` or `C:\Program Files\PromptGuard\promptgua
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `promptguard.cliPath` | `""` | Path to the CLI binary. Leave empty to auto-detect from PATH. |
+| `promptguard.cliPath` | `""` | Path to the CLI binary. Leave empty to auto-detect from PATH. Machine-scoped: a workspace setting cannot override it. |
 | `promptguard.scanOnSave` | `true` | Re-scan the workspace for LLM SDK usage when a supported file is saved. Disable if scanning is slow on large workspaces. |
-| `promptguard.autoInstallCli` | `"prompt"` | Behavior when the CLI is not found: `prompt` (ask), `never` (do nothing), or `auto` (install silently). |
+| `promptguard.autoInstallCli` | `"prompt"` | Behavior when the CLI is not found: `prompt` (ask), `never` (do nothing), or `auto` (install silently). Machine-scoped: a workspace setting cannot override it. |
 
 ## Commands
 
