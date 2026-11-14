@@ -228,6 +228,56 @@ jobs:
         env:
           VSCE_PAT: ${{ steps.secrets.outputs.VSCE_PAT }}
 
+  # Open VSX is the registry Cursor, Windsurf and other VS Code forks search.
+  # It publishes the same tested .vsix as the Marketplace job, through Open
+  # VSX trusted publishing: the job trades its GitHub OIDC token for a
+  # five-minute, single-extension token, so no Open VSX token is stored
+  # anywhere. The registration on open-vsx.org (namespace `promptguard`,
+  # extension `promptguard-vscode`, repo promptguardhq/promptguard-vscode,
+  # workflow release.yml) names this file: renaming it breaks publishing.
+  # https://github.com/eclipse-openvsx/openvsx/wiki/Trusted-Publishing
+  publish-openvsx:
+    name: Publish to Open VSX
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, '-')
+    permissions:
+      contents: read
+      id-token: write # the OIDC token Open VSX exchanges
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # For the pinned `ovsx` binary only; nothing is compiled here.
+      - name: Install dependencies
+        run: npm ci
+
+      # The bytes `build` tested, as in the Marketplace job.
+      - name: Download the built extension
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: extension
+
+      - name: Publish to Open VSX
+        run: |
+          set -euo pipefail
+          count=$(find . -maxdepth 1 -name '*.vsix' | wc -l | tr -d ' ')
+          if [ "$count" != "1" ]; then
+            echo "::error::expected exactly one .vsix from the build artifact, found $count" >&2
+            exit 1
+          fi
+          vsix=$(find . -maxdepth 1 -name '*.vsix')
+          echo "Publishing $vsix"
+          # --trusted-publishing fails rather than falling back to a token.
+          npx ovsx publish --packagePath "$vsix" --trusted-publishing
+
   # Tells Slack #releases this version is on the Marketplace (ADR-0038 in the
   # platform repo). Skipped with publish for a pre-release tag. It cannot fail
   # the release: the job is continue-on-error and post-release.sh exits 0 on

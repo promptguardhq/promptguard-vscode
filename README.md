@@ -58,21 +58,19 @@ code --install-extension promptguard.promptguard-vscode
 
 #### Cursor, Windsurf and other VS Code forks
 
-The extension is published to the Visual Studio Marketplace only, not to Open
-VSX, so it does not appear in the extension search of Cursor, Windsurf or other
-editors that use Open VSX. Install it from the VSIX file instead:
-
-1. Download `promptguard-vscode-<version>.vsix` from the
-   [latest GitHub release](https://github.com/promptguardhq/promptguard-vscode/releases/latest).
-2. In the editor, open the Command Palette and run
-   **Extensions: Install from VSIX...**, then pick the downloaded file.
-
-Or from the command line, with the editor's own CLI:
+These editors search [Open VSX](https://open-vsx.org/extension/promptguard/promptguard-vscode),
+where the extension is published alongside the Visual Studio Marketplace:
+open the Extensions view, search for "PromptGuard" and click Install. Or from
+the editor's own CLI:
 
 ```bash
-cursor --install-extension promptguard-vscode-0.6.8.vsix
-windsurf --install-extension promptguard-vscode-0.6.8.vsix
+cursor --install-extension promptguard.promptguard-vscode
+windsurf --install-extension promptguard.promptguard-vscode
 ```
+
+Every release also attaches `promptguard-vscode-<version>.vsix` to its
+[GitHub release](https://github.com/promptguardhq/promptguard-vscode/releases/latest),
+for **Extensions: Install from VSIX...** where neither registry is reachable.
 
 A VSIX install does not update itself; repeat these steps for a new release.
 
