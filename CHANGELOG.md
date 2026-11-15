@@ -6,6 +6,8 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
 
 ## [Unreleased]
 
+## [0.6.10] - 2026-11-16
+
 ### Fixed
 
 - **"Sign up / Get API key" opens the sign-up page.** It opened
@@ -19,9 +21,9 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
   header, and `promptguard init` before CLI 2.5.2 added the base URL without
   it, so those calls got 401 on every request while the Problems panel called
   them protected. They are now a warning with the Apply Protection quick fix,
-  which adds the header. This needs a CLI that reports `has_api_key_header`
-  in `scan --json`; with an older CLI, or when the headers come from a
-  variable the CLI cannot read, a base URL still reads as protected.
+  which adds the header. This needs PromptGuard CLI 2.6.0 or later; with an
+  older CLI, or when the headers come from a variable the CLI cannot read, a
+  base URL still reads as protected.
 
 ## [0.6.9] - 2026-11-10
 
