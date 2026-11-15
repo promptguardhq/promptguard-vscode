@@ -49,14 +49,30 @@ const SDK_SCAN_FIXTURE = {
       instance_count: 3,
       files: ["src/app.py", "src/llm.ts"],
       instances: [
-        { file: "src/app.py", line: 10, column: 5, has_base_url: false, current_base_url: null },
-        { file: "src/app.py", line: 22, column: 1, has_base_url: false, current_base_url: null },
+        {
+          file: "src/app.py",
+          line: 10,
+          column: 5,
+          has_base_url: false,
+          current_base_url: null,
+          has_api_key_header: false,
+        },
+        {
+          file: "src/app.py",
+          line: 22,
+          column: 1,
+          has_base_url: false,
+          current_base_url: null,
+          has_api_key_header: false,
+        },
         {
           file: "src/llm.ts",
           line: 3,
           column: 14,
           has_base_url: true,
-          current_base_url: "https://api.promptguard.co/api/v1",
+          // The CLI reports only that a base URL is set, not its value.
+          current_base_url: "(configured)",
+          has_api_key_header: true,
         },
       ],
     },
@@ -280,6 +296,7 @@ suite("CLI Contract Test Suite (stub binary, real exit codes)", function () {
     assert.strictEqual(result.providers[0].instances?.length, 3);
     assert.strictEqual(result.providers[0].instances?.[0].line, 10);
     assert.strictEqual(result.providers[0].instances?.[2].has_base_url, true);
+    assert.strictEqual(result.providers[0].instances?.[2].has_api_key_header, true);
   });
 
   test("detectThreats(): exit 2 (blocked) resolves with the parsed verdict", async () => {

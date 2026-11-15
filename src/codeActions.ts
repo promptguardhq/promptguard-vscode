@@ -1,6 +1,17 @@
 import * as vscode from "vscode";
 import { SUPPORTED_LANGUAGES } from "./utils";
 
+/**
+ * Diagnostics `apply` fixes: no base URL, a file-level detection, and a base
+ * URL without the X-API-Key header, which `apply` adds to a client an
+ * earlier CLI rewrote.
+ */
+const FIXABLE_CODES = new Set([
+  "llm-sdk-unprotected",
+  "llm-sdk-detected",
+  "llm-sdk-unauthenticated",
+]);
+
 export class PromptGuardCodeActionProvider implements vscode.CodeActionProvider {
   public static readonly providedCodeActionKinds = [vscode.CodeActionKind.QuickFix];
 
@@ -25,7 +36,7 @@ export class PromptGuardCodeActionProvider implements vscode.CodeActionProvider 
         continue;
       }
 
-      if (diagnostic.code === "llm-sdk-unprotected" || diagnostic.code === "llm-sdk-detected") {
+      if (typeof diagnostic.code === "string" && FIXABLE_CODES.has(diagnostic.code)) {
         const initialized = this.isInitialized();
 
         const applyAction = new vscode.CodeAction(

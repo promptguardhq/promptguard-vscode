@@ -1,10 +1,48 @@
 import * as vscode from "vscode";
 import { CliWrapper } from "./cli";
 import { resolveManagedFileUri } from "./treeView";
-import { ScanResult } from "./types";
+import { ScanResult, SdkInstance } from "./types";
 import { SUPPORTED_LANGUAGES } from "./utils";
 
 const SCAN_DEBOUNCE_MS = 500;
+
+const APPLY_HINT = "Run 'PromptGuard: Apply Protection'";
+
+/**
+ * How one SDK call site reads in the Problems panel. A base URL alone is not
+ * protection: the proxy reads its key only from `X-API-Key`, so a call that
+ * points at it without the header (what `init` wrote before CLI 2.5.2) gets
+ * 401 on every request. A CLI older than `has_api_key_header` says nothing
+ * about the header, and the base URL keeps its earlier reading.
+ */
+function describeInstance(
+  providerName: string,
+  instance: SdkInstance,
+): { message: string; severity: vscode.DiagnosticSeverity; code: string } {
+  if (!instance.has_base_url) {
+    // Unprotected SDK usage is a Warning (yellow), matching the tree's
+    // yellow-shield framing and the README's "warnings when LLM SDKs are
+    // detected without PromptGuard protection".
+    return {
+      message: `${providerName} SDK detected. ${APPLY_HINT} to secure this call.`,
+      severity: vscode.DiagnosticSeverity.Warning,
+      code: "llm-sdk-unprotected",
+    };
+  }
+  if (instance.has_api_key_header === false) {
+    return {
+      message: `${providerName} SDK points at a base URL but sends no X-API-Key header, so PromptGuard refuses its requests. ${APPLY_HINT} to add it.`,
+      severity: vscode.DiagnosticSeverity.Warning,
+      code: "llm-sdk-unauthenticated",
+    };
+  }
+  // Already protected usage stays a low-noise Hint.
+  return {
+    message: `${providerName} SDK is already protected by PromptGuard.`,
+    severity: vscode.DiagnosticSeverity.Hint,
+    code: "llm-sdk-protected",
+  };
+}
 
 export class PromptGuardDiagnostics {
   private diagnosticCollection: vscode.DiagnosticCollection;
@@ -128,22 +166,10 @@ export class PromptGuardDiagnostics {
           const column = Math.max(0, instance.column - 1);
           const range = new vscode.Range(line, column, line, column + 50);
 
-          const hasProtection = instance.has_base_url;
-          const message = hasProtection
-            ? `${provider.name} SDK is already protected by PromptGuard.`
-            : `${provider.name} SDK detected. Run 'PromptGuard: Apply Protection' to secure this call.`;
-
-          // Unprotected SDK usage is surfaced as a Warning (yellow), matching
-          // the tree's yellow-shield framing and the README's "warnings when
-          // LLM SDKs are detected without PromptGuard protection". Already
-          // protected usage stays a low-noise Hint.
-          const severity = hasProtection
-            ? vscode.DiagnosticSeverity.Hint
-            : vscode.DiagnosticSeverity.Warning;
-
+          const { message, severity, code } = describeInstance(provider.name, instance);
           const diagnostic = new vscode.Diagnostic(range, message, severity);
           diagnostic.source = "PromptGuard";
-          diagnostic.code = hasProtection ? "llm-sdk-protected" : "llm-sdk-unprotected";
+          diagnostic.code = code;
 
           addDiagnostic(instance.file, diagnostic);
         }

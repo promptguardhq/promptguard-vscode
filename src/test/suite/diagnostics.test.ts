@@ -58,6 +58,68 @@ suite("Diagnostics Test Suite", () => {
     diagnostics.dispose();
   });
 
+  function routedInstance(hasApiKeyHeader?: boolean): ScanResult {
+    return {
+      total_files_scanned: 1,
+      files_with_sdks: 1,
+      total_instances: 1,
+      providers: [
+        {
+          name: "openai",
+          file_count: 1,
+          instance_count: 1,
+          files: ["app.py"],
+          instances: [
+            {
+              file: "app.py",
+              line: 3,
+              column: 1,
+              has_base_url: true,
+              current_base_url: "(configured)",
+              ...(hasApiKeyHeader === undefined ? {} : { has_api_key_header: hasApiKeyHeader }),
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  // A base URL without the X-API-Key header is what `promptguard init` wrote
+  // before CLI 2.5.2: the proxy refuses every request with 401, so it must not
+  // be shown as protected.
+  test("applyScanResult warns on a base URL that sends no X-API-Key", () => {
+    const diagnostics = new PromptGuardDiagnostics({} as CliWrapper);
+    const folderUri = vscode.Uri.file("/test/workspace");
+
+    diagnostics.applyScanResult(routedInstance(false), folderUri);
+
+    const diags = diagnostics.getDiagnostics(vscode.Uri.joinPath(folderUri, "app.py"));
+    assert.strictEqual(diags.length, 1);
+    assert.strictEqual(diags[0].code, "llm-sdk-unauthenticated");
+    assert.strictEqual(diags[0].severity, vscode.DiagnosticSeverity.Warning);
+    assert.strictEqual(
+      diags[0].message,
+      "openai SDK points at a base URL but sends no X-API-Key header, so PromptGuard refuses its requests. Run 'PromptGuard: Apply Protection' to add it.",
+    );
+
+    diagnostics.dispose();
+  });
+
+  test("applyScanResult treats a base URL with X-API-Key as protected", () => {
+    const diagnostics = new PromptGuardDiagnostics({} as CliWrapper);
+    const folderUri = vscode.Uri.file("/test/workspace");
+
+    diagnostics.applyScanResult(routedInstance(true), folderUri);
+
+    const diags = diagnostics.getDiagnostics(vscode.Uri.joinPath(folderUri, "app.py"));
+    assert.strictEqual(diags[0].code, "llm-sdk-protected");
+    assert.strictEqual(diags[0].severity, vscode.DiagnosticSeverity.Hint);
+
+    diagnostics.dispose();
+  });
+
+  // A CLI older than the field says nothing about the header; without a
+  // signal the diagnostic keeps its earlier reading rather than guess.
   test("applyScanResult marks protected instances as hints", () => {
     const cli = {} as CliWrapper;
     const diagnostics = new PromptGuardDiagnostics(cli);

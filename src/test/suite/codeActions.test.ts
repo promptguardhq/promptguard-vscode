@@ -2,22 +2,22 @@ import * as assert from "assert";
 import * as vscode from "vscode";
 import { PromptGuardCodeActionProvider } from "../../codeActions";
 
-function unprotectedDiagnostic(): vscode.Diagnostic {
+function unprotectedDiagnostic(code = "llm-sdk-unprotected"): vscode.Diagnostic {
   const diagnostic = new vscode.Diagnostic(
     new vscode.Range(0, 0, 0, 10),
     "openai SDK detected. Run 'PromptGuard: Apply Protection' to secure this call.",
     vscode.DiagnosticSeverity.Warning,
   );
   diagnostic.source = "PromptGuard";
-  diagnostic.code = "llm-sdk-unprotected";
+  diagnostic.code = code;
   return diagnostic;
 }
 
-function runProvider(isInitialized: boolean): vscode.CodeAction[] {
+function runProvider(isInitialized: boolean, code?: string): vscode.CodeAction[] {
   const provider = new PromptGuardCodeActionProvider(() => isInitialized);
   const document = { uri: vscode.Uri.file("/workspace/app.ts") } as vscode.TextDocument;
   const context = {
-    diagnostics: [unprotectedDiagnostic()],
+    diagnostics: [unprotectedDiagnostic(code)],
     triggerKind: vscode.CodeActionTriggerKind.Automatic,
     only: undefined,
   } as vscode.CodeActionContext;
@@ -87,7 +87,12 @@ suite("Code Actions Test Suite", () => {
   // ==========================================================================
 
   test("Diagnostic codes should match expected values", () => {
-    const codes = ["llm-sdk-unprotected", "llm-sdk-protected", "llm-sdk-detected"];
+    const codes = [
+      "llm-sdk-unprotected",
+      "llm-sdk-unauthenticated",
+      "llm-sdk-protected",
+      "llm-sdk-detected",
+    ];
 
     for (const code of codes) {
       assert.ok(typeof code === "string");
@@ -98,6 +103,16 @@ suite("Code Actions Test Suite", () => {
   // ==========================================================================
   // PROVIDER BEHAVIOR TESTS (init-state gating, unified titles)
   // ==========================================================================
+
+  // `apply` adds the missing X-API-Key to a client an earlier CLI rewrote, so
+  // the same quick fix serves a base URL that sends no header.
+  test("offers Apply Protection for a base URL without X-API-Key", () => {
+    const actions = runProvider(true, "llm-sdk-unauthenticated");
+    const apply = actions.find((a) => a.title === "Apply Protection");
+    assert.ok(apply, `no Apply action: ${actions.map((a) => a.title).join(", ")}`);
+    assert.strictEqual(apply.command?.command, "promptguard.apply");
+    assert.strictEqual(apply.isPreferred, true);
+  });
 
   test("provider offers Apply Protection, Initialize, and Scan quick-fixes", () => {
     const actions = runProvider(true);
