@@ -21,9 +21,10 @@ export interface SdkInstance {
   current_base_url?: string;
   /**
    * Whether the call sets an `X-API-Key` header, the only place the proxy
-   * reads its key from. Absent from CLIs before the field was added.
+   * reads its key from. `null` when the headers come from somewhere the CLI
+   * cannot see (a variable, a splat); absent from CLIs before the field.
    */
-  has_api_key_header?: boolean;
+  has_api_key_header?: boolean | null;
 }
 
 export interface StatusResult {

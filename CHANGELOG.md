@@ -20,7 +20,8 @@ All notable changes to the PromptGuard VS Code extension will be documented in t
   it, so those calls got 401 on every request while the Problems panel called
   them protected. They are now a warning with the Apply Protection quick fix,
   which adds the header. This needs a CLI that reports `has_api_key_header`
-  in `scan --json`; with an older CLI a base URL still reads as protected.
+  in `scan --json`; with an older CLI, or when the headers come from a
+  variable the CLI cannot read, a base URL still reads as protected.
 
 ## [0.6.9] - 2026-11-10
 

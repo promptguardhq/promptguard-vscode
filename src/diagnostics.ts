@@ -12,8 +12,9 @@ const APPLY_HINT = "Run 'PromptGuard: Apply Protection'";
  * How one SDK call site reads in the Problems panel. A base URL alone is not
  * protection: the proxy reads its key only from `X-API-Key`, so a call that
  * points at it without the header (what `init` wrote before CLI 2.5.2) gets
- * 401 on every request. A CLI older than `has_api_key_header` says nothing
- * about the header, and the base URL keeps its earlier reading.
+ * 401 on every request. Only a definite `false` warns: `null` (headers the
+ * CLI cannot see) and a CLI older than the field keep the base URL's earlier
+ * reading rather than flag a call that may well send the header.
  */
 function describeInstance(
   providerName: string,
@@ -31,7 +32,7 @@ function describeInstance(
   }
   if (instance.has_api_key_header === false) {
     return {
-      message: `${providerName} SDK points at a base URL but sends no X-API-Key header, so PromptGuard refuses its requests. ${APPLY_HINT} to add it.`,
+      message: `${providerName} SDK has a base URL but sends no X-API-Key header, so PromptGuard refuses its requests if that URL is the PromptGuard proxy. ${APPLY_HINT} to add it.`,
       severity: vscode.DiagnosticSeverity.Warning,
       code: "llm-sdk-unauthenticated",
     };
@@ -177,7 +178,7 @@ export class PromptGuardDiagnostics {
         for (const filePath of provider.files) {
           const diagnostic = new vscode.Diagnostic(
             new vscode.Range(0, 0, 0, 100),
-            `${provider.name} SDK detected. Run 'PromptGuard: Apply Protection' to secure this call.`,
+            `${provider.name} SDK detected. ${APPLY_HINT} to secure this call.`,
             vscode.DiagnosticSeverity.Warning,
           );
           diagnostic.source = "PromptGuard";

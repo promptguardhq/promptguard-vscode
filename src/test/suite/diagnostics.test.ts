@@ -58,7 +58,7 @@ suite("Diagnostics Test Suite", () => {
     diagnostics.dispose();
   });
 
-  function routedInstance(hasApiKeyHeader?: boolean): ScanResult {
+  function routedInstance(hasApiKeyHeader?: boolean | null): ScanResult {
     return {
       total_files_scanned: 1,
       files_with_sdks: 1,
@@ -99,7 +99,7 @@ suite("Diagnostics Test Suite", () => {
     assert.strictEqual(diags[0].severity, vscode.DiagnosticSeverity.Warning);
     assert.strictEqual(
       diags[0].message,
-      "openai SDK points at a base URL but sends no X-API-Key header, so PromptGuard refuses its requests. Run 'PromptGuard: Apply Protection' to add it.",
+      "openai SDK has a base URL but sends no X-API-Key header, so PromptGuard refuses its requests if that URL is the PromptGuard proxy. Run 'PromptGuard: Apply Protection' to add it.",
     );
 
     diagnostics.dispose();
@@ -114,6 +114,19 @@ suite("Diagnostics Test Suite", () => {
     const diags = diagnostics.getDiagnostics(vscode.Uri.joinPath(folderUri, "app.py"));
     assert.strictEqual(diags[0].code, "llm-sdk-protected");
     assert.strictEqual(diags[0].severity, vscode.DiagnosticSeverity.Hint);
+
+    diagnostics.dispose();
+  });
+
+  // Headers the CLI cannot see may well carry the key: no false alarm.
+  test("applyScanResult does not warn when the header is unknown", () => {
+    const diagnostics = new PromptGuardDiagnostics({} as CliWrapper);
+    const folderUri = vscode.Uri.file("/test/workspace");
+
+    diagnostics.applyScanResult(routedInstance(null), folderUri);
+
+    const diags = diagnostics.getDiagnostics(vscode.Uri.joinPath(folderUri, "app.py"));
+    assert.strictEqual(diags[0].code, "llm-sdk-protected");
 
     diagnostics.dispose();
   });
