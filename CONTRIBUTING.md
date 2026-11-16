@@ -67,12 +67,12 @@ Tests use `@vscode/test-electron` and Mocha. They launch a real VS Code instance
 | File | What it tests |
 |---|---|
 | `src/test/suite/extension.test.ts` | Extension activation, command registration |
-| `src/test/suite/cli.test.ts` | CLI binary detection and invocation |
-| `src/test/suite/cliInstaller.test.ts` | CLI auto-install flow |
+| `src/test/suite/cli.test.ts` | CLI wrapper helpers: `CliExecutionError`, `--api-key` redaction in logged args, CLI output sanitizing, quota-error detection |
+| `src/test/suite/cliInstaller.test.ts` | CLI auto-install helpers: release asset name per platform and arch, checksum file parsing |
 | `src/test/suite/diagnostics.test.ts` | Diagnostic provider (inline warnings for unprotected LLM calls) |
 | `src/test/suite/codeActions.test.ts` | Quick-fix code actions |
 | `src/test/suite/treeView.test.ts` | Sidebar tree view provider |
-| `src/test/suite/secrets.test.ts` | Hardcoded secret detection |
+| `src/test/suite/secrets.test.ts` | API key input validation (`pg_` prefix, empty and truncated keys) |
 | `src/test/suite/cliContract.test.ts` | CLI JSON contract, exit codes, response schemas, `CliExecutionError`, API-key passing |
 | `src/test/suite/statusBar.test.ts` | Status bar states, and that a failed status reads "Unavailable", not "Not initialized" |
 
