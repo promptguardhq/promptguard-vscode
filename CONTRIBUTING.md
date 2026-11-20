@@ -127,17 +127,19 @@ Releases are triggered by pushing a tag matching `v*`:
 
 ```bash
 # 1. Update version in package.json
-# 2. Commit and push to main
+# 2. Move the CHANGELOG.md entries under a `## [0.4.0] - <date>` heading
+# 3. Commit and push to main
 git tag v0.4.0
 git push origin v0.4.0
 ```
 
 The release workflow (`.github/workflows/release.yml`):
 
-1. Lints, compiles, and packages the extension
-2. Creates a GitHub Release with the `.vsix` attached
-3. Publishes to the VS Code Marketplace via `npx vsce publish --packagePath`, so the Marketplace gets the exact `.vsix` attached to the GitHub Release
-4. Publishes the same `.vsix` to Open VSX (the registry Cursor, Windsurf and other forks search) via `npx ovsx publish --trusted-publishing`
+1. Refuses the tag unless `CHANGELOG.md` has a non-empty `## [<version>]` section (`scripts/changelog-section.sh`), and unless the tag matches the `package.json` version
+2. Lints, compiles, tests, and packages the extension
+3. Creates a GitHub Release with the `.vsix` attached, its notes taken from that CHANGELOG section
+4. Publishes to the VS Code Marketplace via `npx vsce publish --packagePath`, so the Marketplace gets the exact `.vsix` attached to the GitHub Release
+5. Publishes the same `.vsix` to Open VSX (the registry Cursor, Windsurf and other forks search) via `npx ovsx publish --trusted-publishing`
 
 Marketplace publishing uses a Personal Access Token (the Marketplace has no OIDC publishing), stored in Google Secret Manager as `VSCODE_VSCE_PAT` and read by the release job at run time; GitHub holds no secrets. Open VSX needs no stored token at all: it trusts this repository's `release.yml` by its GitHub OIDC token, through a trusted-publisher registration on open-vsx.org under the `promptguard` namespace. Renaming `release.yml` breaks that registration. Tags containing a hyphen (e.g., `v0.4.0-beta`) create a release but skip both registries.
 
