@@ -109,17 +109,13 @@ CI runs on every push to `main` and on PRs into `main` (`.github/workflows/ci.ym
 
 Secret scanning (gitleaks) runs on every push and PR in `.github/workflows/secret-scan.yml`, kept out of `ci.yml` so docs-only commits are still scanned.
 
-Reproduce CI locally:
+Reproduce CI locally (after `npm ci`):
 
 ```bash
-npm run lint && npm run format:check && npm run compile && npm test
+bash scripts/check.sh
 ```
 
-On Linux, wrap the test step:
-
-```bash
-xvfb-run -a npm test
-```
+It runs every CI check except packaging, in order: the GitHub-holds-no-secrets, agent-file and no-dashes checks, the architecture fitness check, lint, format check, compile, and the VS Code tests. Run `npx vsce package --no-dependencies` as well when you change packaging. `bash scripts/check.sh --fast` skips the tests; the pre-push hook runs that. On headless Linux, run the full gate under `xvfb-run -a`.
 
 ## Releasing
 
@@ -143,10 +139,7 @@ Marketplace publishing uses a Personal Access Token (the Marketplace has no OIDC
 
 ## PR Checklist
 
-- [ ] `npm run lint` passes
-- [ ] `npm run format:check` passes
-- [ ] `npm run compile` succeeds
-- [ ] `npm test` passes (use `xvfb-run -a npm test` on Linux)
+- [ ] `bash scripts/check.sh` passes (use `xvfb-run -a bash scripts/check.sh` on headless Linux)
 - [ ] New functionality has tests in `src/test/suite/`
 - [ ] PR description explains the change
 
